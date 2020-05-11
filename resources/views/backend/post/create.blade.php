@@ -24,9 +24,8 @@
           <div class="form-group">
             <label for="exampleInputEmail1">Content</label>
             <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="content"placeholder="Content"></textarea>
-            @error('content')
-            <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
+            {!! showError($errors,'content') !!}
+
         </div>
           <div class="form-group">
             <label for="exampleInputFile">File input</label>
@@ -42,6 +41,16 @@
                 @error('image')
                 <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
+            </div>
+            <div class="form-group">
+              <label for="">Danh mục</label> <br> 
+                @foreach ($categories as $item)
+                <input type="checkbox" id="category_id" name="category_id[]" value="{{ $item->id }}">
+                <label for="category_id"> {{$item->name}}</label>
+                &nbsp;
+                <input type="checkbox" id="hot" name="hot[]" value="{{ $item->id }}">
+                <label for="hot">Hot</label> <br>
+                @endforeach
             </div>
         </div>
         <!-- /.card-body -->

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
-use Arr;
+use App\Category;
+use App\PostCategory;
+use Illuminate\Support\Arr;
 use App\Http\Requests\PostRequest;
 
 class postController extends Controller
@@ -16,9 +18,8 @@ class postController extends Controller
      */
     public function index()
     {
-        $posts = Post::paginate(5);
-        // dd($posts);
-        return view('backend.post.list', ['posts' => $posts]);
+        $data['posts'] = Post::all();
+        return view('backend.post.list', $data);
     }
 
     /**
@@ -28,7 +29,8 @@ class postController extends Controller
      */
     public function create()
     {
-        return view('backend.post.create');
+        $data['categories'] = Category::all();
+        return view('backend.post.create', $data);
     }
 
     /**
@@ -39,35 +41,38 @@ class postController extends Controller
      */
     public function store(PostRequest $request)
     {
-    //     $validatedData = $request->validate([
-    //         'title'      => 'required|min:2|unique:posts,title',
-    //         'content'     => 'required|min:10',
-    //         'image'         => 'image',
-    //     ],
-    //     [
-    //         'required' => ':attribute không được để trống',
-    //         'min'   => " :attribute quá ngắn",
-    //         'unique' => ' :attribute trùng',
-    //         'image' => ' :attribute không đúng chuẩn ảnh'
-    //     ],
-    //     [
-    //         'title' => 'Tiêu đề',
-    //         'content' => 'Nội dung',
-    //         'image' => 'file'
-    //     ]
-    // );
-        $data = Arr::except($request->all(), [
-            '_token',
-            'image',
+        // $data = Arr::except($request->all(), [
+        //     '_token',
+        //     'image',
+        //     'category_id',
+        //     'hot'
+        // ]);
+
+        $data = $request->input();
+
+        $post = new Post;
+        $post->fill($data);
+
+        // dd($request->file('image'));
+        if ($request->file('image') != null) {
+            // $post->image = $request->file('image')->store('images', 'public');
+            $post->image = $request['image']->store('images', 'public');
+        } else {
+            $post->image = 'images/no-image.png';
+        }
+
+        $post->save();
+
+        $hot = $request->input('hot') ?? [];
+        foreach ($request->input('category_id') ?? [] as $cId) {
+            PostCategory::create([
+                'post_id' => $post->id,
+                'category_id' => $cId,
+                'hot' => in_array($cId, $hot)
             ]);
-            if($request['image'] != null){
-                $data['image'] = $request['image']->store('images', 'public');
-            }else{
-                $data['image'] = 'images/no-image.png';
-            }
-            // dd($data);
-            Post::create($data);
-            return redirect()->route('post.index');
+        }
+
+        return redirect()->route('post.index');
     }
 
     /**
@@ -80,6 +85,17 @@ class postController extends Controller
     {
         //
     }
+    public function listPostCategory($id)
+    {
+        // dd($id);
+        $categoryListPosts= PostCategory::where('category_id', $id)->get()->SortByDesc('hot');
+        // dd($categoryListPosts);
+        // $post_id_list = array_map(function($val){
+        //     return $val->post_id;
+        // }, $categoryListPosts);
+        // dd($post_id_list);
+        return view('backend.post.list-post', ['categoryListPosts' => $categoryListPosts]);
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -89,8 +105,14 @@ class postController extends Controller
      */
     public function edit($id)
     {
-        $post = Post::where('id',$id)->first();
-        return view('backend.post.edit', ['post'=>$post]);
+        $categories = Category::all();
+        $post = Post::where('id', $id)->first();
+        $postCategories = PostCategory::where('post_id', $id)->get();
+        return view('backend.post.edit', [
+            'categories' => $categories,
+            'post' => $post,
+            'postCategories' => $postCategories,
+        ]);
     }
 
     /**
@@ -100,35 +122,31 @@ class postController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostRequest $request, $id)
     {
-        $validatedData = $request->validate([
-            'title'      => 'required|min:2|unique:posts,title',
-            'content'     => 'required|min:10',
-            'image'         => 'image',
-        ],
-        [
-            'required' => ':attribute không được để trống',
-            'min'   => " :attribute quá ngắn",
-            'unique' => ' :attribute trùng',
-            'image' => ' :attribute không đúng chuẩn ảnh'
-        ],
-        [
-            'title' => 'Tiêu đề',
-            'content' => 'Nội dung',
-            'image' => 'file'
-        ]
-    );
-        $data= Arr::except($request->all(), ['_token','image']);
-        $post=Post::find($id);
-        // dd($post);
-            if($request['image'] != null){
-                $data['image'] = $request['image']->store('storage/images', 'public');
-            }else{
-                $data['image'] = 'images/no-image.png';
-            }
-        // dd($data);
+        // $data = Arr::except($request->all(), ['_token', 'image', 'hot']);
+        $data = $request->input();
+        $post = Post::find($id);
+        $post->fill($data);
+        if ($request['image'] != null) {
+            $data['image'] = $request['image']->store('storage/images', 'public');
+        } else {
+            $data['image'] = 'images/no-image.png';
+        }
         $post->update($data);
+
+        $hot = $request->input('hot') ?? [];
+        // dd($request->input('category_id'));
+        $postCategories = PostCategory::where('post_id', $id)->delete();
+        // dd($postCategories);
+        // $postCategories ->destroy('post_id', $id);
+        foreach ($request->input('category_id') ?? [] as $cId) {
+            PostCategory::create([
+                'post_id' => $post->id,
+                'category_id' => $cId,
+                'hot' => in_array($cId, $hot)
+            ]);
+        }
         return redirect()->back()->withInput();
     }
 
@@ -140,9 +158,9 @@ class postController extends Controller
      */
     public function destroy($id)
     {
-        // dd($id);
-        $post=Post::find($id);
+        $post = Post::find($id);
         // dd($post);
+        $postCategories = PostCategory::where('post_id', $id)->delete();
         $post->delete();
         return redirect()->route('post.index');
     }

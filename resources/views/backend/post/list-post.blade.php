@@ -10,27 +10,25 @@
                 <th scope="col">title</th>
                 <th scope="col">content</th>
                 <th scope="col">image</th>
-                <th scope="col">Category</th>
+                <th scope="col">Hot</th>
                 <th><a class="btn btn-primary" href=" {{ route('post.create')}} "><i class="fas fa-plus"></i></a></th>
             </tr>
         </thead>
         <tbody>
         <tbody>
-            @foreach ($posts as $post)
+            @foreach ($categoryListPosts as $post)
             <tr>
-                <th scope="row">{{ $post->id }}</th>
-                <td>{{ $post->title }}</td>
-                <td> {{ $post->content }} </td>
-                <td> <img width="50px" src="../storage/{{$post->image}}" alt=""> </td>
+                <th scope="row">{{ $post->post_id }}</th>
+                <td>{{ $post->post->title }}</td>
+                <td> {{ $post->post->content }} </td>
+                <td> <img width="50px" src="{{$post->post->image}}" alt=""> </td>
                 <td>
-                    <?php
-                    $postCategory=$post->category()->get();
-                    foreach ($postCategory as $category) {
-                      echo $category->name. ", ";
-                    }
-                ?>
+                    @if ($post->hot != 1)
+                        Không
+                    @endif
+                    Hot
                 </td>
-                <td>
+                {{-- <td>
                     <div class="btn-group btn-group-toggle">
                         <a class="btn btn-warning" href="{{route('post.edit', [$post->id])}}">
                           <i class="far fa-edit"></i>
@@ -44,7 +42,7 @@
                             </button>
                         </form>
                     </div>
-                </td>
+                </td> --}}
             </tr>
             @endforeach
         </tbody>

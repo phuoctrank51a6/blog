@@ -21,7 +21,7 @@
                 <th scope="row">{{ $post->post_id }}</th>
                 <td>{{ $post->post->title }}</td>
                 <td> {{ $post->post->content }} </td>
-                <td> <img width="50px" src="{{$post->post->image}}" alt=""> </td>
+                <td> <img width="50px" src="{{ url('storage/' . $post->post->image) }}" alt=""> </td>
                 <td>
                     @if ($post->hot != 1)
                         Không

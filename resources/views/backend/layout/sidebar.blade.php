@@ -25,7 +25,30 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item has-treeview">
-            <a href="#" class="nav-link active">
+            <a href="{{route('user.index')}}" class="nav-link {{ (request()->is('user')) ? 'active' : '' }}">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Tài khoản
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('user.index') }}" class="nav-link  {{ (request()->is('user')) ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>List user</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/user/create" class="nav-link {{ (request()->is('user/create')) ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Create user</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="{{route('category.index')}}" class="nav-link {{ (request()->is('category')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Category
@@ -34,13 +57,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/category" class="nav-link active">
+                <a href="{{ route('category.index') }}" class="nav-link  {{ (request()->is('category')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>List category</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/category/create" class="nav-link">
+                <a href="/category/create" class="nav-link {{ (request()->is('category/create')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Create category</p>
                 </a>
@@ -48,7 +71,7 @@
             </ul>
           </li>
           <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
+            <a href=" {{ route('post.index') }} " class="nav-link {{ (request()->is('post')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Post
@@ -57,13 +80,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/post" class="nav-link active">
+                <a href="{{ route('post.index') }}" class="nav-link {{ (request()->is('post')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>List post</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/post/create" class="nav-link">
+                <a href="/post/create" class="nav-link {{ (request()->is('post/create')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Create post</p>
                 </a>

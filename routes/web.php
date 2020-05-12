@@ -16,7 +16,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () { return view('welcome'); });
 
-Route::resource('post', 'postController');
+Route::resource('user', 'UserController');
+Route::resource('post', 'PostController');
+
 Route::resource('category', 'CategoryController');
-Route::get('category-list-posts/{id}', 'postController@listPostCategory')->name('categoryListPosts');
+Route::get('category-children/{id}', 'CategoryController@categoryChildren')->name('category-children');
+Route::get('category-list-posts/{id}', 'PostController@listPostCategory')->name('categoryListPosts');
+
 Route::get('menu', 'CategoryController@menu');

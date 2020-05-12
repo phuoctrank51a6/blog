@@ -9,7 +9,7 @@ use App\PostCategory;
 use Illuminate\Support\Arr;
 use App\Http\Requests\PostRequest;
 
-class postController extends Controller
+class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +18,7 @@ class postController extends Controller
      */
     public function index()
     {
-        $data['posts'] = Post::all();
+        $data['posts'] = Post::all()->sortDesc();
         return view('backend.post.list', $data);
     }
 
@@ -56,7 +56,8 @@ class postController extends Controller
         // dd($request->file('image'));
         if ($request->file('image') != null) {
             // $post->image = $request->file('image')->store('images', 'public');
-            $post->image = $request['image']->store('images', 'public');
+            $post->image = $request['image']->store('storage/images', 'public');
+            // $post->image = $request['image']->store('images', 'public');
         } else {
             $post->image = 'images/no-image.png';
         }
@@ -87,13 +88,7 @@ class postController extends Controller
     }
     public function listPostCategory($id)
     {
-        // dd($id);
         $categoryListPosts= PostCategory::where('category_id', $id)->get()->SortByDesc('hot');
-        // dd($categoryListPosts);
-        // $post_id_list = array_map(function($val){
-        //     return $val->post_id;
-        // }, $categoryListPosts);
-        // dd($post_id_list);
         return view('backend.post.list-post', ['categoryListPosts' => $categoryListPosts]);
     }
 
@@ -140,6 +135,7 @@ class postController extends Controller
         $postCategories = PostCategory::where('post_id', $id)->delete();
         // dd($postCategories);
         // $postCategories ->destroy('post_id', $id);
+        // dd($request->input('hot'));
         foreach ($request->input('category_id') ?? [] as $cId) {
             PostCategory::create([
                 'post_id' => $post->id,
@@ -160,7 +156,7 @@ class postController extends Controller
     {
         $post = Post::find($id);
         // dd($post);
-        $postCategories = PostCategory::where('post_id', $id)->delete();
+        // $postCategories = PostCategory::where('post_id', $id)->delete();
         $post->delete();
         return redirect()->route('post.index');
     }

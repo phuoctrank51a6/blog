@@ -20,6 +20,8 @@
                 <th scope="row">{{ $category->id }}</th>
                 <td>
                     <a href="{{ route('categoryListPosts', $category->id) }}">{{ $category->name }}</a>
+                    <br>
+                    <a style="font-size: 12px" href=" {{route('category-children', $category->id)}} ">Có {{ $category->children->count() }} danh mục con</a>
                 </td>
                 <td> {{ $category->parent_id }} </td>
                 <td>

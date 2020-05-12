@@ -14,8 +14,8 @@ class AddForeignToPostCategoryTable extends Migration
     public function up()
     {
         Schema::table('post_category', function (Blueprint $table) {
-            $table->foreign('post_id')->references('id')->on('posts')->change();
-            $table->foreign('category_id')->references('id')->on('categories')->change();
+            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade')->change();
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->change();
         });
     }
 

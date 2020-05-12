@@ -47,22 +47,21 @@
                 </div>
                 <div class="form-group">
                     <label for="">Danh mục</label> <br>
-                    @foreach ($categories as $category) 
-                        <input
-                            @if ($postCategories->where('category_id', $category->id)->where('hot', 1)->count() > 0)
-                                checked="checked"
-                            @endif   
-                        type="checkbox" id="hot{{ $category->id }}" name="hot[]" value="1">
-                        <label for="hot{{ $category->id }}">Hot</label> &nbsp; &nbsp;
-
+                    @foreach ($categories as $category)
                         <input
                             @if ($postCategories->where('category_id', $category->id)->count() > 0)
                                 checked="checked"
                             @endif
                             type="checkbox" id="category_id{{ $category->id }}" name="category_id[]" value="{{ $category->id }}">
+                            <label for="category_id{{ $category->id }}"> {{ $category->name }}</label>
+                            &nbsp; &nbsp;
 
-
-                        <label for="category_id{{ $category->id }}"> {{ $category->name }}</label> <br>
+                        <input
+                        @if ($postCategories->where('category_id', $category->id)->where('hot', 1)->count() > 0)
+                            checked="checked"
+                        @endif
+                        type="checkbox" id="hot{{ $category->id }}" name="hot[]" value="1">
+                        <label for="hot{{ $category->id }}">Hot</label> <br>
                     @endforeach
                 </div>
             </div>

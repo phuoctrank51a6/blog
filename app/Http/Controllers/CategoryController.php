@@ -15,8 +15,13 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::paginate(5);
+        $categories = Category::with('children')->paginate(5);
         // dd($categories);
+        // dd(count(Category::where('parent_id', 3)->get()));
+        return view('backend.category.list', ['categories' => $categories]);
+    }
+    public function categoryChildren($id){
+        $categories = Category::where('parent_id', $id)->paginate(5);
         return view('backend.category.list', ['categories' => $categories]);
     }
     public function menu(){
@@ -44,11 +49,11 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         $data = Arr::except($request->all(), ['_token',]);
         // dd($data);
         Category::create($data);
-        
+
         return redirect()->route('category.index');
     }
 

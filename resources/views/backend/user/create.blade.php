@@ -39,7 +39,7 @@
                   <label for="exampleFormControlSelect1">Example select</label>
                   <select class="form-control" id="exampleFormControlSelect1" name="role">
                     <option value="{{ config('common.role.admin') }}">Admin</option>
-                    <option value="{{ config('common.role.user') }}">User</option>
+                    <option selected value="{{ config('common.role.user') }}">User</option>
                   </select>
                 </div>
             </div>

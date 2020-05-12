@@ -18,15 +18,6 @@
                 <th scope="row">{{ $user->id }}</th>
                 <td>{{ $user->name }}</td>
                 <td> {{ $user->role }} </td>
-                <td> <img width="50px" src="{{$user->image}}" alt=""> </td>
-                <td>
-                    <?php
-                    $userCategory=$user->category()->get();
-                    foreach ($userCategory as $category) {
-                      echo $category->name. ", ";
-                    }
-                ?>
-                </td>
                 <td>
                     <div class="btn-group btn-group-toggle">
                         <a class="btn btn-warning" href="{{route('user.edit', [$user->id])}}">

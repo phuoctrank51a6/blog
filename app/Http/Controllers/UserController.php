@@ -14,6 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
+        // dd(session('name'));
         $users = User::all();
         return view('backend.user.index', ['users' => $users]);
     }
@@ -64,7 +65,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::find($id);
+        return view('backend.user.edit', ['user' => $user]);
     }
 
     /**
@@ -76,7 +78,22 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data =$request->input();
+        $user = User::find($id);
+        // dd($user);
+        if ($data['password'] == null) {
+            $user->update([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'role' => $data['role']
+
+            ]);
+        }else{
+            $data['password'] = Hash::make($data['password']);
+            $user->update($data);
+        }
+        return redirect()->back();
+
     }
 
     /**

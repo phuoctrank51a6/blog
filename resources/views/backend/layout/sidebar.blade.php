@@ -15,7 +15,7 @@
           <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block"> {{ auth()->user()->name }} </a>
         </div>
       </div>
 
@@ -94,10 +94,10 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a href="pages/widgets.html" class="nav-link">
+            <a href=" {{ route('logout') }} " class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
-                Widgets
+                Đăng xuất
                 <span class="right badge badge-danger">New</span>
               </p>
             </a>

@@ -14,13 +14,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () { return view('welcome'); });
+Route::get('/', function () {
+    return view('welcome');
+})->name('welcome');
 
-Route::resource('user', 'UserController');
-Route::resource('post', 'PostController');
+Route::middleware('guest')->group(function () {
+    Route::get('login', 'AuthenticationController@login')->name('login');
+    Route::post('post-login', 'AuthenticationController@postLogin')->name('postLogin');
+});
 
-Route::resource('category', 'CategoryController');
-Route::get('category-children/{id}', 'CategoryController@categoryChildren')->name('category-children');
-Route::get('category-list-posts/{id}', 'PostController@listPostCategory')->name('categoryListPosts');
+Route::group(['middleware' => ['auth', 'check.role']], function () {
+    Route::resource('user', 'UserController');
+    Route::resource('category', 'CategoryController');
+    Route::resource('post', 'PostController');
+
+    Route::get('category-children/{id}', 'CategoryController@categoryChildren')->name('category-children');
+    Route::get('category-list-posts/{id}', 'PostController@listPostCategory')->name('categoryListPosts');
+
+    Route::get('logout', 'AuthenticationController@logout')->name('logout');
+});
 
 Route::get('menu', 'CategoryController@menu');

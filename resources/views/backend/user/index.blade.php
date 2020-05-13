@@ -9,6 +9,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
                 <th scope="col">role</th>
+                <th scope="col">Email</th>
                 <th><a class="btn btn-primary" href=" {{ route('user.create')}} "><i class="fas fa-plus"></i></a></th>
             </tr>
         </thead>
@@ -17,9 +18,10 @@
             <tr>
                 <th scope="row">{{ $user->id }}</th>
                 <td>{{ $user->name }}</td>
+                <td> {{ $user->email }} </td>
                 <td> {{ $user->role }} </td>
                 <td>
-                    <div class="btn-group btn-group-toggle">
+                    <div class="btn-group">
                         <a class="btn btn-warning" href="{{route('user.edit', [$user->id])}}">
                           <i class="far fa-edit"></i>
                         </a>

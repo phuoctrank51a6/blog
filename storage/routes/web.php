@@ -36,11 +36,8 @@ Route::group(['middleware' => ['auth', 'check.role']], function () {
 
     Route::post('detail', 'SearchController@detailPost')->name('detailPost');
 
-    Route::get('send-email', 'EmailController@sendEmail');
-
 
     Route::get('logout', 'AuthenticationController@logout')->name('logout');
 });
 
 Route::get('menu', 'CategoryController@menu');
-

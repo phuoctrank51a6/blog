@@ -21,6 +21,10 @@ Route::get('/', function () {
 Route::middleware('guest')->group(function () {
     Route::get('login', 'AuthenticationController@login')->name('login');
     Route::post('post-login', 'AuthenticationController@postLogin')->name('postLogin');
+    Route::get('fogot-password', 'AuthenticationController@forgotPassword')->name('forgotPassword');
+    Route::post('post-forgot', 'AuthenticationController@postForgot')->name('postForgot');
+    Route::get('new_password/{token}', 'AuthenticationController@newPassword')->name('newPassword');
+    Route::post('update-password', 'AuthenticationController@updatePassword')->name('updatePassword');
 });
 
 Route::group(['middleware' => ['auth', 'check.role']], function () {
@@ -36,7 +40,7 @@ Route::group(['middleware' => ['auth', 'check.role']], function () {
 
     Route::post('detail', 'SearchController@detailPost')->name('detailPost');
 
-    Route::get('send-email', 'EmailController@sendEmail');
+    Route::get('send-mail', 'EmailController@sendEmail');
 
 
     Route::get('logout', 'AuthenticationController@logout')->name('logout');

@@ -98,7 +98,7 @@
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Đăng xuất
-                <span class="right badge badge-danger">New</span>
+                <span class="right badge badge-danger">Hot</span>
               </p>
             </a>
           </li>

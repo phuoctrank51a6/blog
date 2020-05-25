@@ -12,18 +12,11 @@
         @if (session('thongbao'))
             <div class="alert alert-warning">{{session('thongbao')}}</div>
         @endif
-        <form action=" {{ route('postLogin') }} " method="post">
+        <form action=" {{ route('updatePassword') }} " method="post">
             @csrf
           <div class="input-group mb-3">
-            <input type="email" name="email" class="form-control" placeholder="Email">
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-envelope"></span>
-              </div>
-            </div>
-          </div>
-          <div class="input-group mb-3">
             <input type="password" name="password" class="form-control" placeholder="Password">
+            <input type="hidden" name="token" value=" {{$token}} ">
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-lock"></span>
